@@ -1,10 +1,9 @@
 import cv2
 import numpy as np
 
-# Adding the video file
 cap = cv2.VideoCapture('input_video.mp4')
 
-# Getting video properties
+# video properties
 n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -18,7 +17,7 @@ out = cv2.VideoWriter('output_video.mp4', fourcc, fps, (width, height))
 _, prev = cap.read() #first frame
 prev_gray = cv2.cvtColor(prev, cv2.COLOR_BGR2GRAY) #color to grayscale for frame
 
-# transformation matrix for stabilization
+# empty transformation matrix
 transforms = np.zeros((n_frames-1, 3), np.float32)
 
 for i in range(n_frames-1):
@@ -45,10 +44,10 @@ for i in range(n_frames-1):
     dy = m[1, 2]
     da = np.arctan2(m[1, 0], m[0, 0])
     
-    transforms[i] = [dx, dy, da]
+    transforms[i] = [dx, dy, da] #storing into empty transformation matrix
     prev_gray = curr_gray
 
-# trajectory using cumulative sum of transformations
+# finding trajectory using cumulative sum of transformations
 trajectory = np.cumsum(transforms, axis=0)
 
 smoothed_trajectory = np.copy(trajectory)
