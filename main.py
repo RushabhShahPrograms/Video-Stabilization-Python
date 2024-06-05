@@ -1,7 +1,25 @@
+# !pip install ffmpeg-python
+
 import cv2
 import numpy as np
+import subprocess
+from scipy.ndimage import gaussian_filter1d
 
-cap = cv2.VideoCapture('input_video.mp4')
+# Convert the input video to NUT format using ffmpeg
+subprocess.run(["ffmpeg", "-i", "input.mp4", "input.nut"], capture_output=True)
+
+# Adding the video file
+cap = cv2.VideoCapture('input.nut')
+
+# video properties
+n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = cap.get(cv2.CAP_PROP_FPS)
+
+# Saving the processed video file
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+out = cv2.VideoWriter('output_video.mp4', fourcc, fps, (width, height))
 
 # video properties
 n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
