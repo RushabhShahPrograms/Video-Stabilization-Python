@@ -3,7 +3,6 @@
 import cv2
 import numpy as np
 import subprocess
-from scipy.ndimage import gaussian_filter1d
 
 # Convert the input video to NUT format using ffmpeg
 subprocess.run(["ffmpeg", "-i", "input.mp4", "input.nut"], capture_output=True)
